@@ -1,4 +1,4 @@
-# ProcrastiNOT
+﻿# ProcrastiNOT
 
 A local-first academic planning app that helps students recover their study schedule when unexpected commitments disrupt their day.
 
@@ -23,7 +23,7 @@ A local-first academic planning app that helps students recover their study sche
 Clone the repository, then enter its directory:
 
 ```bash
-git clone <PUBLIC_GITHUB_REPOSITORY_URL>
+git clone https://github.com/dd0906/ProcrastiNOT.git
 cd ProcrastiNOT
 ```
 
@@ -68,3 +68,5 @@ Planner data is stored in browser local storage. This version does not require a
 ## License
 
 This project is licensed under the MIT License. See `LICENSE`.
+
+
