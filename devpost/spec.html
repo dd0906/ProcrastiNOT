@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Visual review of the ProcrastiNOT technical blueprint.">
+  <title>ProcrastiNOT — Technical Specification</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #25342f;
+      --muted: #65736e;
+      --paper: #fbfaf7;
+      --card: #fff;
+      --line: #dfe7e2;
+      --sage: #2b695b;
+      --sage-bg: #e9f3ed;
+      --blush: #fff0eb;
+      --blush-ink: #8b5042;
+      --lavender: #f1eff9;
+      --lavender-ink: #5d5081;
+      --butter: #fff7d8;
+      --butter-ink: #755e16;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.58; }
+    main { width: min(1020px, calc(100% - 32px)); margin: 0 auto; padding: 44px 0 64px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 10px; font-size: clamp(2.3rem, 7vw, 4.2rem); line-height: 1.04; letter-spacing: -.055em; }
+    h2 { margin-bottom: 8px; font-size: 1.34rem; letter-spacing: -.02em; }
+    h3 { margin: 18px 0 6px; font-size: 1rem; }
+    a { color: var(--sage); font-weight: 650; }
+    .eyebrow { margin-bottom: 8px; color: var(--sage); font-size: .78rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    .lead { max-width: 760px; color: var(--muted); font-size: 1.08rem; }
+    .status { display: inline-flex; align-items: center; gap: 8px; padding: 6px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--muted); font-size: .85rem; }
+    .status::before { width: 8px; height: 8px; border-radius: 50%; background: #2b8a64; content: ""; }
+    section { margin-top: 25px; padding: clamp(19px, 4vw, 30px); border: 1px solid var(--line); border-radius: 21px; background: var(--card); box-shadow: 0 12px 34px rgb(37 71 61 / 5%); }
+    .sub { margin-bottom: 19px; color: var(--muted); }
+    .diagram-wrap { overflow-x: auto; padding: 4px 0; }
+    .diagram { display: block; width: 100%; min-width: 770px; height: auto; }
+    .diagram text { font-family: inherit; }
+    .steps { display: grid; gap: 11px; }
+    details { overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: var(--card); }
+    summary { display: flex; align-items: center; gap: 11px; padding: 15px 17px; cursor: pointer; font-weight: 700; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { margin-left: auto; color: var(--muted); content: "+"; font-size: 1.25rem; font-weight: 500; }
+    details[open] summary::after { content: "−"; }
+    .num { display: grid; width: 28px; height: 28px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: var(--sage-bg); color: var(--sage); font-size: .82rem; }
+    .body { padding: 0 20px 18px 56px; color: var(--muted); }
+    .body ul, .body ol { margin: 0; padding-left: 20px; }
+    .body li + li { margin-top: 6px; }
+    .body strong { color: var(--ink); }
+    .code { overflow-x: auto; margin: 12px 0 0; padding: 15px; border: 1px solid var(--line); border-radius: 13px; background: #f7f8f5; color: var(--ink); font: .86rem/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+    .tile { padding: 15px; border-radius: 14px; background: var(--sage-bg); }
+    .tile:nth-child(2) { background: var(--lavender); }
+    .tile:nth-child(3) { background: var(--butter); }
+    .tile strong { display: block; margin-bottom: 5px; }
+    .tile span { color: var(--muted); font-size: .93rem; }
+    .callout { margin: 13px 0 0; padding: 14px 16px; border-left: 4px solid var(--blush-ink); border-radius: 0 12px 12px 0; background: var(--blush); }
+    .footer { margin: 20px 4px 0; color: var(--muted); font-size: .9rem; }
+    @media (max-width: 680px) {
+      main { padding-top: 30px; }
+      .grid { grid-template-columns: 1fr; }
+      section { border-radius: 17px; }
+      .body { padding-left: 19px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">Build With AI · Technical specification draft</p>
+      <h1>ProcrastiNOT</h1>
+      <p class="lead">A local-first React website whose independent deterministic scheduler proposes a realistic recovery plan, explains its choices, and waits for the student's approval.</p>
+      <span class="status">Approved technical blueprint</span>
+    </header>
+
+    <section aria-labelledby="plain-title">
+      <h2 id="plain-title">How the app works</h2>
+      <p class="sub">The browser shows the dashboard, local storage remembers the accepted day and read-only prior-day archives, and a separate tested function calculates proposals. Nothing is sent to an AI or a server.</p>
+      <div class="diagram-wrap">
+        <svg class="diagram" viewBox="0 0 980 245" role="img" aria-labelledby="data-title data-desc">
+          <title id="data-title">ProcrastiNOT data flow</title>
+          <desc id="data-desc">Student actions update React planner state. The scheduler produces a separate proposal. Local storage preserves the accepted day, proposal history, and read-only archives separately. The student can approve or reject.</desc>
+          <defs>
+            <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+              <path d="M0,0 L9,4.5 L0,9 Z" fill="#91a69b"></path>
+            </marker>
+          </defs>
+          <path d="M180 94 H214 M385 94 H419 M590 94 H624 M795 94 H829" fill="none" stroke="#91a69b" stroke-width="2.5" marker-end="url(#arrow)"></path>
+          <path d="M714 145 V197 H300 V145" fill="none" stroke="#91a69b" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#arrow)"></path>
+          <g>
+            <rect x="10" y="42" width="170" height="104" rx="17" fill="#fff0eb" stroke="#f0d9d2"></rect>
+            <text x="95" y="73" text-anchor="middle" fill="#8b5042" font-size="12" font-weight="750">STUDENT</text>
+            <text x="95" y="99" text-anchor="middle" fill="#25342f" font-size="15" font-weight="700">Edits / adds lab</text>
+            <text x="95" y="122" text-anchor="middle" fill="#65736e" font-size="12">validates inputs</text>
+          </g>
+          <g>
+            <rect x="214" y="42" width="171" height="104" rx="17" fill="#e9f3ed" stroke="#cbded2"></rect>
+            <text x="299" y="73" text-anchor="middle" fill="#2b695b" font-size="12" font-weight="750">REACT</text>
+            <text x="299" y="99" text-anchor="middle" fill="#25342f" font-size="15" font-weight="700">Planner state</text>
+            <text x="299" y="122" text-anchor="middle" fill="#65736e" font-size="12">versioned inputs</text>
+          </g>
+          <g>
+            <rect x="419" y="42" width="171" height="104" rx="17" fill="#fff7d8" stroke="#efe3af"></rect>
+            <text x="504" y="73" text-anchor="middle" fill="#755e16" font-size="12" font-weight="750">PURE FUNCTION</text>
+            <text x="504" y="99" text-anchor="middle" fill="#25342f" font-size="15" font-weight="700">Scheduler</text>
+            <text x="504" y="122" text-anchor="middle" fill="#65736e" font-size="12">stable, testable result</text>
+          </g>
+          <g>
+            <rect x="624" y="42" width="171" height="104" rx="17" fill="#f1eff9" stroke="#ded9ef"></rect>
+            <text x="709" y="73" text-anchor="middle" fill="#5d5081" font-size="12" font-weight="750">SEPARATE COPY</text>
+            <text x="709" y="99" text-anchor="middle" fill="#25342f" font-size="15" font-weight="700">Proposal</text>
+            <text x="709" y="122" text-anchor="middle" fill="#65736e" font-size="12">not yet accepted</text>
+          </g>
+          <g>
+            <rect x="829" y="42" width="141" height="104" rx="17" fill="#e9f3ed" stroke="#cbded2"></rect>
+            <text x="899" y="73" text-anchor="middle" fill="#2b695b" font-size="12" font-weight="750">STUDENT</text>
+            <text x="899" y="99" text-anchor="middle" fill="#25342f" font-size="15" font-weight="700">Approve or keep</text>
+            <text x="899" y="122" text-anchor="middle" fill="#65736e" font-size="12">explicit choice</text>
+          </g>
+          <text x="505" y="225" text-anchor="middle" fill="#65736e" font-size="12" font-weight="650">Local storage keeps the active day, proposal history, and prior-day archives distinct</text>
+        </svg>
+      </div>
+    </section>
+
+    <section aria-labelledby="journey-title">
+      <h2 id="journey-title">The approved journey, through the code</h2>
+      <p class="sub">Each step maps back to `prd.md > The Core Journey` and has a clear implementation home.</p>
+      <div class="steps">
+        <details open>
+          <summary><span class="num">1</span>Open the sample dashboard</summary>
+          <div class="body">`sampleDay.ts` supplies the clean baseline. `persistence.ts` loads valid browser-saved data or defaults to the sample. `App` keeps Ghost in the welcome area, shows Penguin after a newly completed task, places Hedgehog in the incomplete-task editor, and puts Jumpclip beside Add task. Cloudy remains pending until its original artwork is available; no broken image or replacement art is used.</div>
+        </details>
+        <details>
+          <summary><span class="num">2</span>Edit and validate</summary>
+          <div class="body">`TaskForm` and `CommitmentForm` keep unsaved edits in the form. `validation.ts` returns field errors; valid saves dispatch one reducer action and advance the input revision. A saved edit makes a matching current proposal outdated.</div>
+        </details>
+        <details>
+          <summary><span class="num">3</span>Add the 4–6 PM surprise lab</summary>
+          <div class="body">The action adds one fixed commitment (not a duplicate), leaves accepted sessions untouched, then calculates a proposal from the new revision.</div>
+        </details>
+        <details>
+          <summary><span class="num">4</span>Calculate and compare</summary>
+          <div class="body">The scheduler subtracts blockers from remaining explicit study windows, orders incomplete tasks by actual deadline, priority, and original order, then uses the agreed whole-task earliest-fit rule. `RecoveryPanel` compares the result to its saved baseline and explains moved, completed, and unscheduled work.</div>
+        </details>
+        <details>
+          <summary><span class="num">5</span>Approve, reject, or reset</summary>
+          <div class="body">Approval checks the input revision and current clock before any update. Rejection preserves the accepted schedule and the lab. Ordinary same-day reset restores today's sample, clears all current-day proposal history, and returns to the initial recovery preview; it does not create an archive.</div>
+        </details>
+        <details>
+          <summary><span class="num">6</span>Preserve a day after date rollover</summary>
+          <div class="body">If the saved date differs from today's local date, the old plan and proposal history become read-only and editing/scheduling/approval pause. The student can cancel or confirm <strong>Start Today's Sample Day</strong>; confirmation archives the old day and activates a clean sample for today. A failed archive write leaves the old plan active.</div>
+        </details>
+      </div>
+    </section>
+
+    <section aria-labelledby="stack-title">
+      <h2 id="stack-title">Local-first architecture</h2>
+      <p class="sub">React + TypeScript + Vite, with React's built-in reducer/hooks; no backend, account service, AI API, or extra state library.</p>
+      <div class="grid">
+        <article class="tile"><strong>React + TypeScript</strong><span>Typed dashboard, forms, timeline, recovery comparison, and named planner actions.</span></article>
+        <article class="tile"><strong>Vite + CSS</strong><span>Simple local development/build and responsive styling with the approved warm palette.</span></article>
+        <article class="tile"><strong>Vitest + Testing Library</strong><span>Pure scheduler tests plus a few user-visible interaction tests; development-only tools.</span></article>
+      </div>
+      <p class="sub" style="margin-top:18px">Run `npm install`, then `npm run dev`; open <code>http://localhost:5173/</code>. Verify with `npm run test -- --run` and `npm run build`. No keys or secrets are required.</p>
+      <p class="sub">Local storage is private to each browser and origin. A judge gets clean sample data; a live link is optional after the local app, public repository, licence/setup guide, and under-three-minute demo video are ready.</p>
+    </section>
+
+    <section aria-labelledby="algorithm-title">
+      <h2 id="algorithm-title">The scheduler in six steps</h2>
+      <p class="sub">This is the agreed deterministic rule set, not an AI-generated decision.</p>
+      <div class="steps">
+        <details open>
+          <summary><span class="num">1</span>Keep what cannot move</summary>
+          <div class="body">Copy fixed commitments, protected sleep, unavailable periods, and completed sessions unchanged. Remove old placements only for incomplete tasks; an In progress task still needs its full entered duration.</div>
+        </details>
+        <details>
+          <summary><span class="num">2</span>Calculate remaining free windows</summary>
+          <div class="body">Start from explicit study windows only. Remove every blocker. Drop fully elapsed windows and clip a window in progress to the injected current time. Empty gaps outside declared windows are never available.</div>
+        </details>
+        <details>
+          <summary><span class="num">3</span>Sort tasks</summary>
+          <div class="body">Earliest actual deadline first; then High, Medium, Low; then original task order. Display categories such as Overdue and Approaching do not alter this order.</div>
+        </details>
+        <details>
+          <summary><span class="num">4</span>Place whole tasks, one by one</summary>
+          <div class="body">Find the earliest slot long enough. If a whole task fits inside its preferred window, choose its earliest fit; otherwise ignore the soft preference and choose the earliest full-fit remaining slot (even if it partly overlaps that window). Subtract each placement before considering the next task. Never backtrack, split, shorten, or overbook.</div>
+        </details>
+        <details>
+          <summary><span class="num">5</span>Report honestly</summary>
+          <div class="body">An unplaced task due today or earlier is At risk, with a plain reason. A future-deadline task not placed today is Not scheduled today—not described as impossible. Overdue remains an accurate deadline label even if scheduled later today.</div>
+        </details>
+        <details>
+          <summary><span class="num">6</span>Protect repeatability</summary>
+          <div class="body">The engine receives current time as an input, never reads the machine clock itself. The same data and same injected time yield the same placements and explanations.</div>
+        </details>
+      </div>
+    </section>
+
+    <section aria-labelledby="data-title">
+      <h2 id="data-title">The important data boundaries</h2>
+      <div class="grid">
+        <article class="tile"><strong>Sample baseline</strong><span>Immutable sample data in `sampleDay.ts`; reset always copies this clean starting point.</span></article>
+        <article class="tile"><strong>Accepted schedule</strong><span>The schedule currently in effect; saved separately from a generated proposal.</span></article>
+        <article class="tile"><strong>Proposal snapshots</strong><span>Input revision, baseline, suggested sessions, explanations, and current/outdated/approved/rejected status.</span></article>
+        <article class="tile"><strong>Read-only day archives</strong><span>Complete prior-day plan and proposal history, retained for reference and never sent to the scheduler.</span></article>
+      </div>
+      <div class="callout"><strong>Outdated protection:</strong> Saved input edits advance a revision. Approval also checks that no proposed incomplete session start time has passed. Any stale proposal stays available for review but cannot be partly applied.</div>
+      <div class="callout"><strong>PRD alignment:</strong> The approved PRD's reset remains a same-day restore of the original demo state. Confirmed date rollover is a separate behavior approved during 4-spec; the PRD has not been silently changed.</div>
+      <details style="margin-top:12px">
+        <summary><span class="num">S</span>Sample data and available time</summary>
+        <div class="body">
+          <ul>
+            <li>Protected sleep: 22:30–24:00 and 00:00–07:00.</li>
+            <li>Explicit study windows: 07:30–12:00, 13:00–18:00, and 18:00–22:30; no other calendar gap is assumed available.</li>
+            <li>Fixed lecture 09:00–10:30, fixed class 14:00–15:00, and unavailable break 12:00–13:00.</li>
+            <li>Completed 08:00–08:30 session stays put. Sample incomplete sessions 10:30–12:00 and 16:30–18:00; the latter visibly conflicts with the surprise lab.</li>
+            <li>Include a 300-minute due-today task that cannot fit as one whole session, plus a future-deadline task for truthful “Not scheduled today” behavior.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section aria-labelledby="verify-title">
+      <h2 id="verify-title">How the build will be verified</h2>
+      <div class="steps">
+        <details open>
+          <summary><span class="num">V</span>Vitest: scheduling and data rules</summary>
+          <div class="body">
+            <ul>
+              <li>Deadline, priority, and original-order sorting; deterministic repeat runs.</li>
+              <li>Explicit windows with fixed/unavailable blockers; elapsed and partly elapsed windows; completed sessions in the past.</li>
+              <li>In progress uses full duration; exact-fit, too-short, no-time, and no-splitting cases.</li>
+              <li>Preferred-window selection and fallback; risk today/overdue versus not-scheduled-today future deadlines.</li>
+              <li>Valid clock-based approval and approval after a proposed start has elapsed; the stale case applies nothing.</li>
+              <li>Storage load/save, invalid saved data, same-day reset, rollover detection/archive/cancel/confirmation/write failure, no remaining windows, and same-input repeatability with a fixed test clock.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary><span class="num">R</span>React Testing Library: student-visible flow</summary>
+          <div class="body">
+            <ul>
+              <li>Dashboard starts populated; form errors preserve input and valid save updates the timeline.</li>
+              <li>Adding the lab creates a visible proposal but leaves accepted sessions unchanged.</li>
+              <li>Approval applies only a current proposal; rejection leaves the fixed lab and conflict visible.</li>
+              <li>Editing invalidates the proposal; same-day reset restores the initial recovery preview; date rollover pauses actions until confirmed.</li>
+              <li>Rollover confirmation preserves the old plan read-only and starts a clean sample for today; cancel changes nothing.</li>
+              <li>Reload retains saved accepted data in the same browser and invalid saved data falls back safely.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section aria-labelledby="build-title">
+      <h2 id="build-title">Small build stages</h2>
+      <div class="grid">
+        <article class="tile"><strong>1 · Foundation</strong><span>Vite app, typed sample day, dashboard shell, responsive look.</span></article>
+        <article class="tile"><strong>2 · Reliable data</strong><span>Forms, validation, reducer, local persistence, same-day reset, rollover archives, and tests.</span></article>
+        <article class="tile"><strong>3 · Core proof</strong><span>Pure scheduler, proposal lifecycle, comparison, approval/rejection, user-flow tests.</span></article>
+      </div>
+      <div class="callout"><strong>Then:</strong> inspect and verify the complete local app, rehearse the short video, prepare the public repo and licence, and only then consider optional free static hosting.</div>
+    </section>
+
+    <p class="footer">Markdown is canonical: <a href="./spec.md">Read the complete technical specification draft</a>. This visual companion is available offline and uses inline SVG rather than a network diagram library.</p>
+  </main>
+</body>
+</html>

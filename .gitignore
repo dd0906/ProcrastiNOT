@@ -1,0 +1,23 @@
+﻿devpost/learner-profile.md
+
+.env
+.env.*
+!.env.example
+
+/node_modules/
+/dist/
+/coverage/
+
+.vscode/
+
+# Local AI workflow files
+.agents/
+skills-lock.json
+
+# Original mascot source artwork
+/Jumpclip Mascot sheet.png
+/compact app icon.png
+/hedgehog mascot sheet.png
+/penguin mascot sheet.png
+/primary mascot.png
+/website header logo.png

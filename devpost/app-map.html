@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>ProcrastiNOT — App Map</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: #273b34;
+      background: #f8f7f3;
+      --muted: #56675f;
+      --line: #dce4dc;
+      --card: #fffefa;
+      --sage: #e9f3ed;
+      --lavender: #f1eff8;
+    }
+    * { box-sizing: border-box; }
+    body { max-width: 900px; margin: 0 auto; padding: 32px 20px 56px; line-height: 1.6; }
+    a { color: #245b4c; text-underline-offset: 3px; }
+    a:focus-visible, summary:focus-visible { outline: 3px solid #327361; outline-offset: 3px; }
+    h1, h2, h3 { line-height: 1.25; }
+    h1 { margin-bottom: 8px; font-size: clamp(1.8rem, 5vw, 2.5rem); }
+    h2 { margin-top: 32px; font-size: 1.35rem; }
+    h3 { font-size: 1rem; }
+    p { max-width: 72ch; }
+    .lede, .note { color: var(--muted); }
+    .card { margin: 18px 0; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+    .diagram { overflow-x: auto; padding: 12px; border-radius: 10px; background: var(--sage); }
+    .diagram svg { display: block; width: 100%; min-width: 580px; height: auto; }
+    .diagram text { font: 15px "Segoe UI", system-ui, sans-serif; fill: #273b34; }
+    .diagram .small { font-size: 12px; fill: #56675f; }
+    .diagram .box { fill: #fffefa; stroke: #8ba99a; stroke-width: 1.5; }
+    .diagram .test { fill: #f1eff8; stroke: #a39aba; stroke-width: 1.5; }
+    .diagram .arrow { stroke: #327361; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    ol, ul { padding-left: 1.4rem; }
+    li + li { margin-top: 10px; }
+    code, kbd { padding: .12em .35em; border-radius: 4px; background: #f1f2ec; font-family: Consolas, "Courier New", monospace; overflow-wrap: anywhere; }
+    .route li { padding-left: 4px; }
+    details { margin-top: 12px; }
+    summary { cursor: pointer; font-weight: 650; }
+    footer { margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+    @media (max-width: 520px) { body { padding: 22px 14px 40px; } .card { padding: 14px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="note">ProcrastiNOT · Project guide</p>
+    <h1>App map</h1>
+    <p class="lede">ProcrastiNOT helps a student recover a study day when a fixed commitment disrupts it. The browser dashboard edits a sample day, calculates a deterministic schedule proposal, and lets the student decide whether to apply it. The proposal is not applied automatically.</p>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="flow-title">
+      <h2 id="flow-title">One action, from save to feedback</h2>
+      <p>When a student marks a task complete and saves it, the app validates the form, updates planner state, and shows the Penguin progress message. A regression test checks both the message and its visibility action.</p>
+      <div class="diagram" role="img" aria-label="Save a completed task flows through TaskForm validation, App state and feedback, then a visible Penguin message; the test checks this behavior.">
+        <svg viewBox="0 0 780 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#327361"/>
+            </marker>
+          </defs>
+          <rect class="box" x="12" y="54" width="170" height="72" rx="12"/>
+          <text x="97" y="81" text-anchor="middle">Save completed task</text>
+          <text class="small" x="97" y="105" text-anchor="middle">TaskForm · submit</text>
+          <path class="arrow" d="M184 90 H218"/>
+          <rect class="box" x="224" y="54" width="176" height="72" rx="12"/>
+          <text x="312" y="81" text-anchor="middle">Validate and save</text>
+          <text class="small" x="312" y="105" text-anchor="middle">App · task onSave</text>
+          <path class="arrow" d="M402 90 H436"/>
+          <rect class="box" x="442" y="54" width="166" height="72" rx="12"/>
+          <text x="525" y="81" text-anchor="middle">Show progress</text>
+          <text class="small" x="525" y="105" text-anchor="middle">status + scroll into view</text>
+          <path class="arrow" d="M610 90 H644"/>
+          <rect class="test" x="650" y="54" width="118" height="72" rx="12"/>
+          <text x="709" y="81" text-anchor="middle">Regression</text>
+          <text class="small" x="709" y="105" text-anchor="middle">App.test.tsx</text>
+          <text class="small" x="390" y="164" text-anchor="middle">Visible result: accessible Penguin completion feedback</text>
+        </svg>
+      </div>
+      <details>
+        <summary>How the wider app is organized</summary>
+        <p><code>App.tsx</code> connects the dashboard to the planner reducer. The pure scheduler in <code>src/logic/scheduler.ts</code> creates explainable proposals; <code>src/storage/persistence.ts</code> keeps the browser's saved day. There is no backend or external service.</p>
+      </details>
+    </section>
+
+    <section aria-labelledby="route-title">
+      <h2 id="route-title">A 3-stop route through the code</h2>
+      <p>This is a reference route to follow in the editor. Search the named symbol or phrase in each real project file.</p>
+      <ol class="route">
+        <li><a href="../src/components/TaskForm.tsx"><code>src/components/TaskForm.tsx</code></a> — find <code>submit</code>. It validates before calling <code>onSave</code>, so invalid values do not reach the planner.</li>
+        <li><a href="../src/App.tsx"><code>src/App.tsx</code></a> — find the task editor's <code>onSave</code> and <code>taskCompletionFeedback</code>. Newly completed work sets feedback, dispatches <code>task/saved</code>, and renders the accessible status; the effect scrolls it into view.</li>
+        <li><a href="../src/App.test.tsx"><code>src/App.test.tsx</code></a> — find <code>shows the two task statuses and saves completion without rescheduling completed work</code>. It exercises the save, checks the status and mascot asset, and verifies the scroll request.</li>
+      </ol>
+    </section>
+
+    <section class="card" aria-labelledby="change-title">
+      <h2 id="change-title">To change this, start here</h2>
+      <ul>
+        <li>Change task form rules or field messages: <a href="../src/components/TaskForm.tsx"><code>TaskForm.tsx</code></a> and its related cases in <a href="../src/logic/validation.test.ts"><code>validation.test.ts</code></a>.</li>
+        <li>Change what completion feedback says or when it appears: <a href="../src/App.tsx"><code>App.tsx</code></a>; preserve the user-visible behavior in <a href="../src/App.test.tsx"><code>App.test.tsx</code></a>.</li>
+        <li>Change recovery scheduling rules: start with <a href="../src/logic/scheduler.ts"><code>scheduler.ts</code></a> and its focused tests in <a href="../src/logic/scheduler.test.ts"><code>scheduler.test.ts</code></a>.</li>
+        <li>Change the dashboard's visual layout: <a href="../src/styles/app.css"><code>app.css</code></a>.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="practice-title">
+      <h2 id="practice-title">A practice to reuse</h2>
+      <p>For a user-facing behavior, specify an observable result and verify it at the boundary a user experiences. Here, the completion feedback is not only rendered: <code>App.test.tsx</code> checks the accessible status, mascot asset, and scroll-to-visible request. On another project, the same approach helps catch features that exist in state or markup but are not actually noticeable to users.</p>
+    </section>
+
+    <section class="card" aria-labelledby="run-title">
+      <h2 id="run-title">Run it again</h2>
+      <ol>
+        <li>From the project root, run <code>npm install</code> once if dependencies are not installed.</li>
+        <li>Run <code>npm run dev</code> and open the local URL Vite reports (normally <code>http://localhost:5173/</code>).</li>
+        <li>Run checks with <code>npm run test -- --run</code> and <code>npm run build</code>.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>Source snapshot: <code>cb36bb6</code> plus the current working-tree edits; the map describes the code as reviewed on 2026-10-20. This standalone guide works offline and may drift if the source changes. Reopen it from <code>devpost/app-map.html</code>.</p>
+  </footer>
+</body>
+</html>

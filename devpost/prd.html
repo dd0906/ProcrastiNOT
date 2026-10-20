@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive visual review of ProcrastiNOT's MVP product requirements.">
+  <title>ProcrastiNOT — Product Requirements</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #25342f;
+      --muted: #65736e;
+      --paper: #fbfaf7;
+      --card: #fff;
+      --line: #dfe7e2;
+      --sage: #2b695b;
+      --sage-bg: #e9f3ed;
+      --blush: #fff0eb;
+      --blush-ink: #8b5042;
+      --lavender: #f1eff9;
+      --lavender-ink: #5d5081;
+      --butter: #fff7d8;
+      --butter-ink: #755e16;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.6; }
+    main { width: min(1000px, calc(100% - 32px)); margin: 0 auto; padding: 44px 0 64px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 10px; font-size: clamp(2.3rem, 7vw, 4.2rem); line-height: 1.04; letter-spacing: -.055em; }
+    h2 { margin-bottom: 8px; font-size: 1.35rem; letter-spacing: -.02em; }
+    h3 { margin: 18px 0 6px; font-size: 1rem; }
+    a { color: var(--sage); font-weight: 650; }
+    .eyebrow { margin-bottom: 8px; color: var(--sage); font-size: .78rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    .lead { max-width: 720px; color: var(--muted); font-size: 1.12rem; }
+    .status { display: inline-flex; align-items: center; gap: 8px; padding: 6px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--muted); font-size: .85rem; }
+    .status::before { width: 8px; height: 8px; border-radius: 50%; background: var(--sage); content: ""; }
+    section { margin-top: 25px; padding: clamp(19px, 4vw, 30px); border: 1px solid var(--line); border-radius: 21px; background: var(--card); box-shadow: 0 12px 34px rgb(37 71 61 / 5%); }
+    .sub { margin-bottom: 20px; color: var(--muted); }
+    .journey-wrap { overflow-x: auto; padding: 4px 0; }
+    .journey { display: block; width: 100%; min-width: 760px; height: auto; }
+    .journey text { font-family: inherit; }
+    .steps { display: grid; gap: 11px; }
+    details { overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: var(--card); }
+    summary { display: flex; align-items: center; gap: 11px; padding: 15px 17px; cursor: pointer; font-weight: 700; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { margin-left: auto; color: var(--muted); content: "+"; font-size: 1.25rem; font-weight: 500; }
+    details[open] summary::after { content: "−"; }
+    .num { display: grid; width: 28px; height: 28px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: var(--sage-bg); color: var(--sage); font-size: .82rem; }
+    .body { padding: 0 19px 18px 56px; color: var(--muted); }
+    .body ul, .body ol { margin: 0; padding-left: 20px; }
+    .body li + li { margin-top: 6px; }
+    .body strong { color: var(--ink); }
+    .criteria { margin-top: 13px !important; padding: 12px 14px !important; border-radius: 12px; background: #f7f8f5; list-style: none; }
+    .criteria li { position: relative; padding-left: 25px; }
+    .criteria li::before { position: absolute; left: 0; color: var(--sage); content: "✓"; font-weight: 800; }
+    .callout { margin: 12px 0 0; padding: 13px 15px; border-left: 4px solid var(--blush-ink); border-radius: 0 11px 11px 0; background: var(--blush); }
+    .decision-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+    .decision { padding: 15px; border-radius: 14px; background: var(--sage-bg); }
+    .decision:nth-child(2) { background: var(--lavender); }
+    .decision:nth-child(3) { background: var(--butter); }
+    .decision strong { display: block; margin-bottom: 5px; }
+    .decision span { color: var(--muted); font-size: .93rem; }
+    .footer { margin: 20px 4px 0; color: var(--muted); font-size: .9rem; }
+    @media (max-width: 680px) {
+      main { padding-top: 30px; }
+      .decision-grid { grid-template-columns: 1fr; }
+      section { border-radius: 17px; }
+      .body { padding-left: 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">Build With AI · Approved product requirements</p>
+      <h1>ProcrastiNOT</h1>
+      <p class="lead">A student planner that helps a college student recover a study day after a fixed commitment disrupts it.</p>
+      <span class="status">Approved by learner</span>
+    </header>
+
+    <section aria-labelledby="journey-title">
+      <h2 id="journey-title">One dashboard, one recovery loop</h2>
+      <p class="sub">The student remains in control: the surprise lab creates a conflict, the scheduler proposes a recovery, and only the student decides whether to apply it.</p>
+      <div class="journey-wrap">
+        <svg class="journey" viewBox="0 0 960 220" role="img" aria-labelledby="diagram-title diagram-desc">
+          <title id="diagram-title">ProcrastiNOT MVP journey</title>
+          <desc id="diagram-desc">Open a populated sample day, edit valid tasks, add a fixed surprise lab, inspect an explained deterministic proposal, approve or keep the original, and reset to repeat.</desc>
+          <defs>
+            <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+              <path d="M0,0 L9,4.5 L0,9 Z" fill="#91a69b"></path>
+            </marker>
+          </defs>
+          <path d="M175 91 H199 M350 91 H374 M525 91 H549 M700 91 H724" fill="none" stroke="#91a69b" stroke-width="2.5" marker-end="url(#arrow)"></path>
+          <path d="M836 144 V185 H111 V144" fill="none" stroke="#91a69b" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#arrow)"></path>
+          <g>
+            <rect x="10" y="36" width="165" height="108" rx="17" fill="#e9f3ed" stroke="#cbded2"></rect>
+            <text x="92" y="68" text-anchor="middle" fill="#2b695b" font-size="12" font-weight="750">START</text>
+            <text x="92" y="94" text-anchor="middle" fill="#25342f" font-size="15" font-weight="700">Sample day</text>
+            <text x="92" y="118" text-anchor="middle" fill="#65736e" font-size="12">ready to edit</text>
+          </g>
+          <g>
+            <rect x="199" y="36" width="151" height="108" rx="17" fill="#fff7d8" stroke="#efe3af"></rect>
+            <text x="274" y="68" text-anchor="middle" fill="#755e16" font-size="12" font-weight="750">PREPARE</text>
+            <text x="274" y="94" text-anchor="middle" fill="#25342f" font-size="15" font-weight="700">Edit tasks</text>
+            <text x="274" y="118" text-anchor="middle" fill="#65736e" font-size="12">validate inputs</text>
+          </g>
+          <g>
+            <rect x="374" y="36" width="151" height="108" rx="17" fill="#fff0eb" stroke="#f0d9d2"></rect>
+            <text x="449" y="68" text-anchor="middle" fill="#8b5042" font-size="12" font-weight="750">DISRUPTION</text>
+            <text x="449" y="94" text-anchor="middle" fill="#25342f" font-size="15" font-weight="700">4–6 PM lab</text>
+            <text x="449" y="118" text-anchor="middle" fill="#65736e" font-size="12">fixed conflict</text>
+          </g>
+          <g>
+            <rect x="549" y="36" width="151" height="108" rx="17" fill="#f1eff9" stroke="#ded9ef"></rect>
+            <text x="624" y="68" text-anchor="middle" fill="#5d5081" font-size="12" font-weight="750">PROPOSE</text>
+            <text x="624" y="94" text-anchor="middle" fill="#25342f" font-size="15" font-weight="700">Explain changes</text>
+            <text x="624" y="118" text-anchor="middle" fill="#65736e" font-size="12">before / after / risk</text>
+          </g>
+          <g>
+            <rect x="724" y="36" width="226" height="108" rx="17" fill="#e9f3ed" stroke="#cbded2"></rect>
+            <text x="837" y="68" text-anchor="middle" fill="#2b695b" font-size="12" font-weight="750">STUDENT DECIDES</text>
+            <text x="837" y="94" text-anchor="middle" fill="#25342f" font-size="15" font-weight="700">Approve or keep</text>
+            <text x="837" y="118" text-anchor="middle" fill="#65736e" font-size="12">reset to repeat</text>
+          </g>
+          <text x="483" y="211" text-anchor="middle" fill="#65736e" font-size="12" font-weight="650">Reset returns to the populated sample day</text>
+        </svg>
+      </div>
+    </section>
+
+    <section aria-labelledby="dashboard-title">
+      <h2 id="dashboard-title">The screen and the task editor</h2>
+      <p class="sub">The approved scope expands from “an editable sample day” into one dashboard with specific information and validation behavior.</p>
+      <div class="steps">
+        <details open>
+          <summary><span class="num">1</span>Populated sample-day dashboard</summary>
+          <div class="body">
+            <ul>
+              <li>Header with ProcrastiNOT name/logo, tagline, day date, and reset action.</li>
+              <li>Supportive greeting and a compact summary of available study time, protected sleep, and separate highlights for overdue, due-today, and approaching deadlines.</li>
+              <li>Single-day timeline with classes and other fixed commitments, study sessions, breaks, and sleep; movable study and fixed items look distinct.</li>
+              <li>Study items show task name, duration, deadline, priority, and scheduled time. Sample data includes a study session that conflicts with the demo lab.</li>
+              <li>The recovery area initially previews what rescheduling does; the student need not create data before understanding the product.</li>
+            </ul>
+            <ul class="criteria">
+              <li>Opening the app immediately shows populated sample data and the planned conflict.</li>
+              <li>Task details and fixed-versus-movable distinctions are readable on the dashboard.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary><span class="num">2</span>Add or edit a task</summary>
+          <div class="body">
+            <ul>
+              <li>Required: nonblank task name, numeric estimated duration greater than 0 and up to 480 minutes inclusive, valid deadline, supported completion status.</li>
+              <li>Priority is High, Medium, or Low; Medium is visibly selected by default for a new task.</li>
+              <li>Preferred time window is optional and soft. Tasks are whole continuous sessions in the MVP; never silently split or shorten.</li>
+              <li>Field-specific inline errors preserve other input. Invalid tasks cannot be saved or sent to the scheduler.</li>
+              <li>Messages: “Please enter a task name.”; “Duration must be between 1 and 480 minutes.”; “Please enter a valid deadline.”</li>
+              <li>Deadline labels use the student's local calendar date: Overdue (passed), Due today, Approaching (after today and within 3 calendar days), or Upcoming (more than 3 days away). Completed tasks are excluded from overdue/due-today/approaching labels.</li>
+            </ul>
+            <ul class="criteria">
+              <li>Blank/space-only names, zero/negative/non-numeric/over-480-minute durations, invalid deadlines, and invalid preferred windows are rejected.</li>
+              <li>Past deadlines save and are marked overdue when the task is incomplete; a valid correction saves and updates the dashboard without refresh.</li>
+              <li>The dashboard separately highlights overdue, due-today, and approaching tasks with clear text labels; these categories do not change scheduling order.</li>
+              <li>Errors have text and visual indication, not colour alone; other entered values remain intact.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section aria-labelledby="recovery-title">
+      <h2 id="recovery-title">Surprise lab, scheduling, and student control</h2>
+      <p class="sub">The proposal is a real deterministic recalculation, not a mock-up or an automatic change.</p>
+      <div class="steps">
+        <details open>
+          <summary><span class="num">3</span>Add the fixed surprise lab</summary>
+          <div class="body">
+            <ul>
+              <li>“Add surprise lab” inserts a clearly labelled unexpected commitment from 4–6 PM.</li>
+              <li>The lab remains fixed; conflicting study work is identified. Adding it does not silently change or apply the study plan.</li>
+              <li>Reset removes the simulated lab and proposal state so the same sample scenario can be demonstrated again.</li>
+            </ul>
+            <ul class="criteria">
+              <li>The 4–6 PM lab appears at the correct time and is never moved.</li>
+              <li>The conflict is visible while the original study schedule remains unapplied.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary><span class="num">4</span>Generate an explained whole-task proposal</summary>
+          <div class="body">
+            <ul>
+              <li>Fixed commitments and protected sleep are preserved; completed sessions stay at their original times and are never scheduled again.</li>
+              <li>Earlier deadlines take precedence; priority breaks equal-deadline ties (High, then Medium, then Low). Original sample order breaks remaining ties.</li>
+              <li>Try a preferred window when feasible; otherwise consider other suitable free time.</li>
+              <li>Schedule a task only as one full continuous session in a sufficiently long slot. Never split, shorten, or overbook it.</li>
+              <li>If it cannot fit before the deadline, leave it visibly unscheduled or at risk and explain why. Never hide unfinished work, shorten or split it, or make an infeasible day appear feasible by overbooking. Flag past deadlines as overdue. Identical inputs yield the same result.</li>
+              <li>Compare an unchanged source baseline with the proposal generated from its matching input version; show moved, unchanged, and completed sessions, concise explanations, work that fits, and deadlines/tasks at risk.</li>
+            </ul>
+            <ul class="criteria">
+              <li>Fixed commitments, protected sleep, and completed sessions remain unchanged; no completed work is scheduled again or overlapped.</li>
+              <li>Deadline ordering, priority tie-break, soft preference, no-splitting, and no-overbooking rules are observable in the proposal.</li>
+              <li>Every task that cannot fit stays visibly unscheduled or at risk, with a plain-language reason; the proposal does not imply unfinished work is complete or the day is feasible.</li>
+              <li>The before-and-after comparison uses the unchanged source baseline and matching input version, distinguishing moved, unchanged, and completed sessions.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary><span class="num">5</span>Approve, keep original, or recover from stale data</summary>
+          <div class="body">
+            <ul>
+              <li>Actions: “Approve revised plan” and “Keep original plan.” Approval applies a current proposal; keeping original dismisses it without applying moved sessions. The lab remains a fixed 4–6 PM commitment and any conflict stays visible; rejecting the proposal never removes or moves it.</li>
+              <li>If task or commitment data changes during review, keep the proposal intact but mark it Outdated and show: “Your tasks have changed since this recovery plan was created. Review an updated plan before applying changes.”</li>
+              <li>An outdated plan remains inspectable but cannot be applied. Generate an updated plan from current data or cancel the edit; never apply automatically.</li>
+              <li>Reset restores original sample tasks and commitments, removes the simulated lab and old proposals, and returns to the initial dashboard.</li>
+            </ul>
+            <ul class="criteria">
+              <li>Only a current proposal can be approved; applying requires an explicit student action.</li>
+              <li>Outdated proposals and their explanations stay unchanged for reference; repeated edits make the open proposal outdated again.</li>
+              <li>Reset returns the app to its initial sample state and the same scenario can be replayed.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section aria-labelledby="decisions-title">
+      <h2 id="decisions-title">Boundary and decisions</h2>
+      <div class="decision-grid">
+        <article class="decision"><strong>In this MVP</strong><span>One editable sample day, validated tasks, fixed lab simulation, deterministic whole-task recovery, clear comparison, explicit approval, reset.</span></article>
+        <article class="decision"><strong>Deferred</strong><span>Task splitting and partial progress, weekly planning, notes, reminders, timer, AI study help, authentication, interactive or AI-generated mascot behavior. Contextual static mascot art is approved in the PRD.</span></article>
+        <article class="decision"><strong>Never silently</strong><span>Move fixed or completed work, use sleep, shorten or split tasks, overbook, or apply an outdated or unapproved proposal.</span></article>
+      </div>
+      <div class="callout"><strong>PRD approved.</strong> Task duration is greater than 0 and up to 480 minutes; deadline labels use the student's local calendar date, with Approaching covering the next 3 calendar days. Exact slot assignment and editor mechanics are for the technical specification.</div>
+    </section>
+
+    <p class="footer">Markdown is canonical: <a href="./prd.md">Read the approved PRD</a>. This visual companion is designed for offline review.</p>
+  </main>
+</body>
+</html>
