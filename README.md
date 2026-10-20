@@ -68,5 +68,3 @@ Planner data is stored in browser local storage. This version does not require a
 ## License
 
 This project is licensed under the MIT License. See `LICENSE`.
-
-
